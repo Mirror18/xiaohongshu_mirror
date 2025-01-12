@@ -1,4 +1,0 @@
-spring:
-  profiles:
-    # 激活环境
-    active: dev
