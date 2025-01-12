@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    # 激活环境
+    active: dev
+
+mybatis:
+  # MyBatis xml 配置文件路径
+  mapper-locations: classpath:/mapper/**/*.xml
+
