@@ -1,7 +1,5 @@
 package com.mirror.xiaohongshu.auth;
 
-import com.mirror.xiaohongshu.auth.domain.dataobject.UserDO;
-import com.mirror.xiaohongshu.auth.domain.mapper.UserDOMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
