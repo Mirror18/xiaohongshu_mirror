@@ -96,6 +96,13 @@
                 <version>${revision}</version>
             </dependency>
 
+            <!-- Jackson 组件 -->
+            <dependency>
+                <groupId>com.mirror</groupId>
+                <artifactId>xiaohong-spring-boot-starter-jackson</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- Jackson -->
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
