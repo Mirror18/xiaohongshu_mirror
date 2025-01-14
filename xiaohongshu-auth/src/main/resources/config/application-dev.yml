@@ -61,3 +61,7 @@ spring:
 logging:
   level:
     com.mirror.xiaohongshu.auth.domain.mapper: debug
+
+aliyun: # 接入阿里云（发送短信使用）
+  accessKeyId: LTAI5tQccDvKxuePPFHX4NQc
+  accessKeySecret: BiTP5lccnah6rDjTNAdtrKa8HndBz0
