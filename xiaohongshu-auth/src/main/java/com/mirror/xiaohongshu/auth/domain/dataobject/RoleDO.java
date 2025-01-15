@@ -1,39 +1,31 @@
 package com.mirror.xiaohongshu.auth.domain.dataobject;
 
+import com.mirror.framework.common.enums.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.N;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDO {
+public class RoleDO {
     private Long id;
 
-    private String xiaohongshuId;
+    private String roleName;
 
-    private String password;
-
-    private String nickname;
-
-    private String avatar;
-
-    private LocalDateTime birthday;
-
-    private String backgroundImg;
-
-    private String phone;
-
-    private Integer sex;
+    private String roleKey;
 
     private Integer status;
 
-    private String introduction;
+    private Integer sort;
+
+    private String remark;
 
     private LocalDateTime createTime;
 

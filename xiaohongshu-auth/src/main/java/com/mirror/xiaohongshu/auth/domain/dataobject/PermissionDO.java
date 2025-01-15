@@ -1,44 +1,45 @@
 package com.mirror.xiaohongshu.auth.domain.dataobject;
 
+import com.mirror.framework.common.enums.StatusEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.checkerframework.checker.units.qual.N;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+
+/**
+ * @author mirror
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDO {
+public class PermissionDO {
     private Long id;
 
-    private String xiaohongshuId;
+    private Long parentId;
 
-    private String password;
+    private String name;
 
-    private String nickname;
+    private Byte type;
 
-    private String avatar;
+    private String menuUrl;
 
-    private LocalDateTime birthday;
+    private String menuIcon;
 
-    private String backgroundImg;
+    private Integer sort;
 
-    private String phone;
-
-    private Integer sex;
+    private String permissionKey;
 
     private Integer status;
-
-    private String introduction;
 
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
 
     private Boolean isDeleted;
+
 
 }
