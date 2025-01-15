@@ -2,6 +2,7 @@ package com.mirror.xiaohongshu.auth.service.impl;
 
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.mirror.framework.common.enums.DeletedEnum;
 import com.mirror.framework.common.enums.StatusEnum;
@@ -68,10 +69,12 @@ public class UserServiceImpl implements UserService {
             case VERIFICATION_CODE: // 验证码登录
                 String verificationCode = userLoginReqVO.getCode();
 
+//                // 校验入参验证码是否为空
+//                if (StringUtils.isBlank(verificationCode)) {
+//                    return Response.fail(ResponseCodeEnum.PARAM_NOT_VALID.getErrorCode(), "验证码不能为空");
+//                }
                 // 校验入参验证码是否为空
-                if (StringUtils.isBlank(verificationCode)) {
-                    return Response.fail(ResponseCodeEnum.PARAM_NOT_VALID.getErrorCode(), "验证码不能为空");
-                }
+                Preconditions.checkArgument(StringUtils.isNotBlank(verificationCode), "验证码不能为空");
 
                 // 构建验证码 Redis Key
                 String key = RedisKeyConstants.buildVerificationCodeKey(phone);
