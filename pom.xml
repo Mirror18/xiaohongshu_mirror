@@ -20,6 +20,7 @@
     <modules>
         <module>xiaohongshu-auth</module>
         <module>xiaohong-framework</module>
+        <module>xiaohongshu-gateway</module>
     </modules>
 
     <properties>
