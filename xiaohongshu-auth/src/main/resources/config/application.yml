@@ -37,5 +37,5 @@ sa-token:
 #    bootstrap:
 #      enable: true # 启动时，预热配置
 
-alarm:
-  type: sms # 告警类型
+#alarm:
+#  type: sms # 告警类型
