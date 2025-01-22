@@ -11,8 +11,10 @@ import com.mirror.framework.common.response.Response;
 import com.mirror.framework.common.util.JsonUtils;
 import com.mirror.xiaohongshu.auth.constant.RedisKeyConstants;
 import com.mirror.xiaohongshu.auth.constant.RoleConstants;
+import com.mirror.xiaohongshu.auth.domain.dataobject.RoleDO;
 import com.mirror.xiaohongshu.auth.domain.dataobject.UserDO;
 import com.mirror.xiaohongshu.auth.domain.dataobject.UserRoleDO;
+import com.mirror.xiaohongshu.auth.domain.mapper.RoleDOMapper;
 import com.mirror.xiaohongshu.auth.domain.mapper.UserDOMapper;
 import com.mirror.xiaohongshu.auth.domain.mapper.UserRoleDOMapper;
 import com.mirror.xiaohongshu.auth.enums.LoginTypeEnum;
@@ -28,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -48,7 +51,8 @@ public class UserServiceImpl implements UserService {
     private UserRoleDOMapper userRoleDOMapper;
     @Resource
     private TransactionTemplate transactionTemplate;
-
+    @Resource
+    private RoleDOMapper roleDOMapper;
     /**
      * 登录与注册
      *
@@ -173,7 +177,7 @@ public class UserServiceImpl implements UserService {
     private Long registerUser(String phone) {
         return transactionTemplate.execute(status -> {
             try {
-                // 获取全局自增的小哈书 ID
+                // 获取全局自增的小红书 ID
                 Long xiaohashuId = redisTemplate.opsForValue().increment(RedisKeyConstants.XIAOHONGSHU_ID_GENERATOR_KEY);
 
                 UserDO userDO = UserDO.builder()
@@ -204,10 +208,13 @@ public class UserServiceImpl implements UserService {
                         .build();
                 userRoleDOMapper.insert(userRoleDO);
 
-                // 将该用户的角色 ID 存入 Redis 中
-                List<Long> roles = Lists.newArrayList();
-                roles.add(RoleConstants.COMMON_USER_ROLE_ID);
-                String userRolesKey = RedisKeyConstants.buildUserRoleKey(phone);
+                RoleDO roleDO = roleDOMapper.selectByPrimaryKey(RoleConstants.COMMON_USER_ROLE_ID);
+
+                // 将该用户的角色 ID 存入 Redis 中，指定初始容量为 1，这样可以减少在扩容时的性能开销
+                List<String> roles = new ArrayList<>(1);
+                roles.add(roleDO.getRoleKey());
+
+                String userRolesKey = RedisKeyConstants.buildUserRoleKey(userId);
                 redisTemplate.opsForValue().set(userRolesKey, JsonUtils.toJsonString(roles));
 
                 return userId;
