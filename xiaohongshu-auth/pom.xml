@@ -42,7 +42,7 @@
             <groupId>com.mirror</groupId>
             <artifactId>xiaohong-spring-boot-starter-jackson</artifactId>
         </dependency>
-        <!-- context上下文 组件 -->
+        <!-- 业务上下文组件 -->
         <dependency>
             <groupId>com.mirror</groupId>
             <artifactId>xiaohong-spring-boot-start-biz-context</artifactId>
