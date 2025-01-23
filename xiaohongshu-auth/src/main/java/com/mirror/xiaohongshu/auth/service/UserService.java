@@ -1,6 +1,7 @@
 package com.mirror.xiaohongshu.auth.service;
 
 import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.auth.model.vo.user.UpdatePasswordReqVO;
 import com.mirror.xiaohongshu.auth.model.vo.user.UserLoginReqVO;
 
 /**
@@ -22,4 +23,10 @@ public interface UserService {
      * @return
      */
     Response<?> logout();
+    /**
+     * 修改密码
+     * @param updatePasswordReqVO
+     * @return
+     */
+    Response<?> updatePassword(UpdatePasswordReqVO updatePasswordReqVO);
 }

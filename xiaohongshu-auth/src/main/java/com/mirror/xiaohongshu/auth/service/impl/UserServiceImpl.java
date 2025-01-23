@@ -21,13 +21,16 @@ import com.mirror.xiaohongshu.auth.domain.mapper.UserRoleDOMapper;
 import com.mirror.xiaohongshu.auth.enums.LoginTypeEnum;
 import com.mirror.xiaohongshu.auth.enums.ResponseCodeEnum;
 //import com.mirror.xiaohongshu.auth.filter.LoginUserContextHolder;
+import com.mirror.xiaohongshu.auth.model.vo.user.UpdatePasswordReqVO;
 import com.mirror.xiaohongshu.auth.model.vo.user.UserLoginReqVO;
 import com.mirror.xiaohongshu.auth.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -58,6 +61,7 @@ public class UserServiceImpl implements UserService {
     private RoleDOMapper roleDOMapper;
 
     @Resource(name = "taskExecutor")
+    //@Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
 
     /**
@@ -154,6 +158,34 @@ public class UserServiceImpl implements UserService {
         return Response.success();
     }
 
+    @Resource
+    private PasswordEncoder passwordEncoder;
+    /**
+     * 修改密码
+     *
+     * @param updatePasswordReqVO
+     * @return
+     */
+    @Override
+    public Response<?> updatePassword(UpdatePasswordReqVO updatePasswordReqVO) {
+        // 新密码
+        String newPassword = updatePasswordReqVO.getNewPassword();
+        // 密码加密
+        String encodePassword = passwordEncoder.encode(newPassword);
+
+        // 获取当前请求对应的用户 ID
+        Long userId = LoginUserContextHolder.getUserId();
+
+        UserDO userDO = UserDO.builder()
+                .id(userId)
+                .password(encodePassword)
+                .updateTime(LocalDateTime.now())
+                .build();
+        // 更新密码
+        userDOMapper.updateByPrimaryKeySelective(userDO);
+
+        return Response.success();
+    }
 
 //    /**
 //     * 系统自动注册用户
@@ -202,6 +234,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 系统自动注册用户
+     *
      * @param phone
      * @return
      */

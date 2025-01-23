@@ -2,6 +2,7 @@ package com.mirror.xiaohongshu.auth.controller;
 
 import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
 import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.auth.model.vo.user.UpdatePasswordReqVO;
 import com.mirror.xiaohongshu.auth.model.vo.user.UserLoginReqVO;
 import com.mirror.xiaohongshu.auth.service.UserService;
 import jakarta.annotation.Resource;
@@ -33,5 +34,11 @@ public class UserController {
     @ApiOperationLog(description = "账号登出")
     public Response<?> logout() {
         return userService.logout();
+    }
+
+    @PostMapping("/password/update")
+    @ApiOperationLog(description = "修改密码")
+    public Response<?> updatePassword(@Validated @RequestBody UpdatePasswordReqVO updatePasswordReqVO) {
+        return userService.updatePassword(updatePasswordReqVO);
     }
 }
