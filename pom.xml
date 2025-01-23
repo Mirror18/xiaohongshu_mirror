@@ -52,6 +52,7 @@
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <dysmsapi.version>3.1.1</dysmsapi.version>
         <nacos-config.version>0.3.0-RC</nacos-config.version>
+        <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
     </properties>
 
     <!-- 统一依赖管理 -->
@@ -108,6 +109,13 @@
             <dependency>
                 <groupId>com.mirror</groupId>
                 <artifactId>xiaohong-spring-boot-starter-jackson</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- context上下文 组件 -->
+            <dependency>
+                <groupId>com.mirror</groupId>
+                <artifactId>xiaohong-spring-boot-start-biz-context</artifactId>
                 <version>${revision}</version>
             </dependency>
 
@@ -202,6 +210,12 @@
                 <groupId>cn.dev33</groupId>
                 <artifactId>sa-token-reactor-spring-boot3-starter</artifactId>
                 <version>${sa-token.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

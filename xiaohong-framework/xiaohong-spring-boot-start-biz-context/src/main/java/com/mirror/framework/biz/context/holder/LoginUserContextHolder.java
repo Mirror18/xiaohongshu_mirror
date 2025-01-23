@@ -1,4 +1,4 @@
-package com.mirror.xiaohongshu.auth.filter;
+package com.mirror.framework.biz.context.holder;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.mirror.framework.common.constant.GlobalConstants;
@@ -9,8 +9,8 @@ import java.util.Objects;
 
 /**
  * @Auther: mirror
- * @Date: 2025/1/23 05:02
- * @Description:
+ * @Date: 2025/1/23 11:04
+ * @Description: 登录用户上下文
  */
 public class LoginUserContextHolder {
 

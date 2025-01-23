@@ -22,6 +22,8 @@
         <module>xiaohong-spring-boot-starter-biz-operationlog</module>
         <!-- Jackson 组件 -->
         <module>xiaohong-spring-boot-starter-jackson</module>
+<!--        context上下文组件-->
+        <module>xiaohong-spring-boot-start-biz-context</module>
     </modules>
 
 </project>

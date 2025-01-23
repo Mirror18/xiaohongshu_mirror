@@ -42,6 +42,11 @@
             <groupId>com.mirror</groupId>
             <artifactId>xiaohong-spring-boot-starter-jackson</artifactId>
         </dependency>
+        <!-- context上下文 组件 -->
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohong-spring-boot-start-biz-context</artifactId>
+        </dependency>
         <!-- Mybatis -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -115,6 +120,11 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
         </dependency>
 
     </dependencies>
