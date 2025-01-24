@@ -1,8 +1,12 @@
 #=================================================================
-# minio (上传图片需要，需配置成自己的地址)
+# 对象存储配置
 #=================================================================
-minio:
-  endpoint: http://127.0.0.1:9000
-  accessKey: mirror
-  secretKey: makai2001
-
+storage:
+  minio:
+    endpoint: http://127.0.0.1:9000
+    accessKey: mirror
+    secretKey: makai2001
+  aliyun-oss:
+    endpoint: oss-cn-shenzhen.aliyuncs.com # 改成你自己的
+    accessKeyId: LTAI5tQccDvKxuePPFHX4NQc
+    accessKeySecret: BiTP5lccnah6rDjTNAdtrKa8HndBz0

@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 /**
  * @Auther: mirror
- * @Date: 2025/1/24 10:02
+ * @Date: 2025/1/24 12:13
  * @Description:
  */
-@ConfigurationProperties(prefix = "storage.minio")
+@ConfigurationProperties(prefix = "storage.aliyun-oss")
 @Component
 @Data
-public class MinioProperties {
+public class AliyunOSSProperties {
     private String endpoint;
-    private String accessKey;
-    private String secretKey;
+    private String accessKeyId;
+    private String accessKeySecret;
 }
