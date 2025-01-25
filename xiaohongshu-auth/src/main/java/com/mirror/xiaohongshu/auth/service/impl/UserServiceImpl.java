@@ -23,6 +23,7 @@ import com.mirror.xiaohongshu.auth.enums.ResponseCodeEnum;
 //import com.mirror.xiaohongshu.auth.filter.LoginUserContextHolder;
 import com.mirror.xiaohongshu.auth.model.vo.user.UpdatePasswordReqVO;
 import com.mirror.xiaohongshu.auth.model.vo.user.UserLoginReqVO;
+import com.mirror.xiaohongshu.auth.rpc.UserRpcService;
 import com.mirror.xiaohongshu.auth.service.UserService;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -63,6 +64,10 @@ public class UserServiceImpl implements UserService {
     @Resource(name = "taskExecutor")
     //@Autowired
     private ThreadPoolTaskExecutor threadPoolTaskExecutor;
+
+    @Resource
+    private UserRpcService userRpcService;
+
 
     /**
      * 登录与注册
@@ -108,8 +113,17 @@ public class UserServiceImpl implements UserService {
 
                 // 判断是否注册
                 if (Objects.isNull(userDO)) {
-                    // 若此用户还没有注册，系统自动注册该用户
-                    userId = registerUser(phone);
+//                    // 若此用户还没有注册，系统自动注册该用户
+//                    userId = registerUser(phone);
+                    // RPC: 调用用户服务，注册用户
+                    Long userIdTmp = userRpcService.registerUser(phone);
+
+                    // 若调用用户服务，返回的用户 ID 为空，则提示登录失败
+                    if (Objects.isNull(userIdTmp)) {
+                        throw new BizException(ResponseCodeEnum.LOGIN_FAIL);
+                    }
+
+                    userId = userIdTmp;
                 } else {
                     // 已注册，则获取其用户 ID
                     userId = userDO.getId();
@@ -251,63 +265,63 @@ public class UserServiceImpl implements UserService {
 //        return userId;
 //    }
 
-    /**
-     * 系统自动注册用户
-     *
-     * @param phone
-     * @return
-     */
-    private Long registerUser(String phone) {
-        return transactionTemplate.execute(status -> {
-            try {
-                // 获取全局自增的小红书 ID
-                Long xiaohongshuId = redisTemplate.opsForValue().increment(RedisKeyConstants.XIAOHONGSHU_ID_GENERATOR_KEY);
-
-                UserDO userDO = UserDO.builder()
-                        .phone(phone)
-                        .xiaohongshuId(String.valueOf(xiaohongshuId)) // 自动生成小红书号 ID
-                        .nickname("小红薯" + xiaohongshuId) // 自动生成昵称, 如：小红薯10000
-                        .status(StatusEnum.ENABLE.getValue()) // 状态为启用
-                        .createTime(LocalDateTime.now())
-                        .updateTime(LocalDateTime.now())
-                        .isDeleted(DeletedEnum.NO.getValue()) // 逻辑删除
-                        .build();
-
-                // 添加入库
-                userDOMapper.insert(userDO);
-
-//                int i = 1 / 0;
-
-                // 获取刚刚添加入库的用户 ID
-                Long userId = userDO.getId();
-
-                // 给该用户分配一个默认角色
-                UserRoleDO userRoleDO = UserRoleDO.builder()
-                        .userId(userId)
-                        .roleId(RoleConstants.COMMON_USER_ROLE_ID)
-                        .createTime(LocalDateTime.now())
-                        .updateTime(LocalDateTime.now())
-                        .isDeleted(DeletedEnum.NO.getValue())
-                        .build();
-                userRoleDOMapper.insert(userRoleDO);
-
-                RoleDO roleDO = roleDOMapper.selectByPrimaryKey(RoleConstants.COMMON_USER_ROLE_ID);
-
-                // 将该用户的角色 ID 存入 Redis 中，指定初始容量为 1，这样可以减少在扩容时的性能开销
-                List<String> roles = new ArrayList<>(1);
-                roles.add(roleDO.getRoleKey());
-
-                String userRolesKey = RedisKeyConstants.buildUserRoleKey(userId);
-                redisTemplate.opsForValue().set(userRolesKey, JsonUtils.toJsonString(roles));
-
-                return userId;
-            } catch (Exception e) {
-                status.setRollbackOnly(); // 标记事务为回滚
-                log.error("==> 系统注册用户异常: ", e);
-                return null;
-            }
-        });
-    }
+//    /**
+//     * 系统自动注册用户
+//     *
+//     * @param phone
+//     * @return
+//     */
+//    private Long registerUser(String phone) {
+//        return transactionTemplate.execute(status -> {
+//            try {
+//                // 获取全局自增的小红书 ID
+//                Long xiaohongshuId = redisTemplate.opsForValue().increment(RedisKeyConstants.XIAOHONGSHU_ID_GENERATOR_KEY);
+//
+//                UserDO userDO = UserDO.builder()
+//                        .phone(phone)
+//                        .xiaohongshuId(String.valueOf(xiaohongshuId)) // 自动生成小红书号 ID
+//                        .nickname("小红薯" + xiaohongshuId) // 自动生成昵称, 如：小红薯10000
+//                        .status(StatusEnum.ENABLE.getValue()) // 状态为启用
+//                        .createTime(LocalDateTime.now())
+//                        .updateTime(LocalDateTime.now())
+//                        .isDeleted(DeletedEnum.NO.getValue()) // 逻辑删除
+//                        .build();
+//
+//                // 添加入库
+//                userDOMapper.insert(userDO);
+//
+////                int i = 1 / 0;
+//
+//                // 获取刚刚添加入库的用户 ID
+//                Long userId = userDO.getId();
+//
+//                // 给该用户分配一个默认角色
+//                UserRoleDO userRoleDO = UserRoleDO.builder()
+//                        .userId(userId)
+//                        .roleId(RoleConstants.COMMON_USER_ROLE_ID)
+//                        .createTime(LocalDateTime.now())
+//                        .updateTime(LocalDateTime.now())
+//                        .isDeleted(DeletedEnum.NO.getValue())
+//                        .build();
+//                userRoleDOMapper.insert(userRoleDO);
+//
+//                RoleDO roleDO = roleDOMapper.selectByPrimaryKey(RoleConstants.COMMON_USER_ROLE_ID);
+//
+//                // 将该用户的角色 ID 存入 Redis 中，指定初始容量为 1，这样可以减少在扩容时的性能开销
+//                List<String> roles = new ArrayList<>(1);
+//                roles.add(roleDO.getRoleKey());
+//
+//                String userRolesKey = RedisKeyConstants.buildUserRoleKey(userId);
+//                redisTemplate.opsForValue().set(userRolesKey, JsonUtils.toJsonString(roles));
+//
+//                return userId;
+//            } catch (Exception e) {
+//                status.setRollbackOnly(); // 标记事务为回滚
+//                log.error("==> 系统注册用户异常: ", e);
+//                return null;
+//            }
+//        });
+//    }
 
 
 }

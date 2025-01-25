@@ -133,6 +133,11 @@
             <artifactId>spring-security-crypto</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohongshu-user-api</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

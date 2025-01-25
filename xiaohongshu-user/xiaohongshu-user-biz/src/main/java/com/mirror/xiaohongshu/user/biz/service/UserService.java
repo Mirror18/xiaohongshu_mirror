@@ -2,6 +2,7 @@ package com.mirror.xiaohongshu.user.biz.service;
 
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
+import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
 
 /**
  * @Auther: mirror
@@ -17,4 +18,12 @@ public interface UserService {
      * @return
      */
     Response<?> updateUserInfo(UpdateUserInfoReqVO updateUserInfoReqVO);
+
+    /**
+     * 用户注册
+     *
+     * @param registerUserReqDTO
+     * @return
+     */
+    Response<Long> register(RegisterUserReqDTO registerUserReqDTO);
 }

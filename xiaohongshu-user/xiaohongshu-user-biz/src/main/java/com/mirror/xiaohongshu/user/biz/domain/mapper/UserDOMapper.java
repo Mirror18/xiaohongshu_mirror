@@ -1,5 +1,6 @@
 package com.mirror.xiaohongshu.user.biz.domain.mapper;
 
+
 import com.mirror.xiaohongshu.user.biz.domain.dataobject.UserDO;
 
 public interface UserDOMapper {
@@ -14,4 +15,11 @@ public interface UserDOMapper {
     int updateByPrimaryKeySelective(UserDO record);
 
     int updateByPrimaryKey(UserDO record);
+
+    /**
+     * 根据手机号查询记录
+     * @param phone
+     * @return
+     */
+    UserDO selectByPhone(String phone);
 }
