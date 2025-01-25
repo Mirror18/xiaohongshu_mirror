@@ -1,5 +1,6 @@
 package com.mirror.xiaohongshu.oss.biz.controller;
 
+import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.oss.biz.service.FileService;
 import jakarta.annotation.Resource;
@@ -26,6 +27,7 @@ public class FileController {
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Response<?> uploadFile(@RequestPart(value = "file") MultipartFile file) {
+        log.info("当前用户ID:{}",LoginUserContextHolder.getUserId());
         return fileService.uploadFile(file);
     }
 

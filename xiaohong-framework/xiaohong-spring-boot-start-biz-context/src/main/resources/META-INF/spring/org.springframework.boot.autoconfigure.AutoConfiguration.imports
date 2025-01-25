@@ -1,1 +1,2 @@
 com.mirror.framework.biz.context.config.ContextAutoConfiguration
+com.mirror.framework.biz.context.config.FeignContextAutoConfiguration
