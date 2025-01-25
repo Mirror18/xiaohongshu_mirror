@@ -1,3 +1,4 @@
+
 spring:
   profiles:
     # 激活环境
@@ -41,3 +42,5 @@ sa-token:
 
 #alarm:
 #  type: sms # 告警类型
+server:
+  port: 8081

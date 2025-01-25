@@ -23,6 +23,7 @@
         <module>xiaohongshu-gateway</module>
         <!-- 对象存储服务 -->
         <module>xiaohongshu-oss</module>
+        <module>xiaohongshu-user</module>
     </modules>
 
     <properties>
