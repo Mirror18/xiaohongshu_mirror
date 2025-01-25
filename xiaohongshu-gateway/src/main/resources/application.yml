@@ -13,6 +13,13 @@ spring:
           filters:
             - StripPrefix=1  # 定义过滤器，移除路径的第一个前缀（即移除 /auth）
 
+        - id: user
+          uri: lb://xiaohongshu-user
+          predicates:
+            - Path=/user/**
+          filters:
+            - StripPrefix=1
+
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:
   # token 名称（同时也是 cookie 名称）

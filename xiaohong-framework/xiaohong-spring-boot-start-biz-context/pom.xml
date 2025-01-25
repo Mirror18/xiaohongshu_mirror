@@ -12,7 +12,7 @@
     <!-- 指定打包方式 -->
     <packaging>jar</packaging>
 
-    <artifactId>xiaohong-spring-boot-start-biz-context</artifactId>
+    <artifactId>xiaohong-spring-boot-starter-biz-context</artifactId>
     <name>${project.artifactId}</name>
     <description>上下文组件</description>
 

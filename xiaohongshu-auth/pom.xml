@@ -45,7 +45,7 @@
         <!-- 业务上下文组件 -->
         <dependency>
             <groupId>com.mirror</groupId>
-            <artifactId>xiaohong-spring-boot-start-biz-context</artifactId>
+            <artifactId>xiaohong-spring-boot-starter-biz-context</artifactId>
         </dependency>
         <!-- Mybatis -->
         <dependency>
