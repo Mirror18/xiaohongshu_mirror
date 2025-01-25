@@ -3,6 +3,7 @@ package com.mirror.xiaohongshu.user.biz.service.impl;
 import com.google.common.base.Preconditions;
 import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
 import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.oss.api.FileFeignApi;
 import com.mirror.xiaohongshu.user.biz.domain.dataobject.UserDO;
 import com.mirror.xiaohongshu.user.biz.domain.mapper.UserDOMapper;
 import com.mirror.xiaohongshu.user.biz.enums.ResponseCodeEnum;
@@ -32,6 +33,8 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDOMapper userDOMapper;
 
+    @Resource
+    private FileFeignApi fileFeignApi;
     /**
      * 更新用户信息
      *
@@ -51,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
         if (Objects.nonNull(avatarFile)) {
             // todo: 调用对象存储服务上传文件
+            fileFeignApi.test();
         }
 
         // 昵称

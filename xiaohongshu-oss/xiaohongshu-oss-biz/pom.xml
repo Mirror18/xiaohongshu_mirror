@@ -77,6 +77,18 @@
             <artifactId>jaxb-runtime</artifactId>
         </dependency>
 
+        <!-- 业务接口日志组件 -->
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohong-spring-boot-starter-biz-operationlog</artifactId>
+        </dependency>
+
+        <!-- Jackson 组件 -->
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohong-spring-boot-starter-jackson</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

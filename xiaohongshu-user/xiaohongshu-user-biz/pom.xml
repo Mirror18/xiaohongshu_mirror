@@ -80,6 +80,11 @@
             <artifactId>xiaohong-spring-boot-starter-jackson</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohongshu-oss-api</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

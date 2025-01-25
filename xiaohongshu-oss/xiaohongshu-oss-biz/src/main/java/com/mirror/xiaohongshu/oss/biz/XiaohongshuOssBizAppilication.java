@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description:
  */
 @SpringBootApplication
+
 public class XiaohongshuOssBizAppilication {
     public static void main(String[] args) {
         SpringApplication.run(XiaohongshuOssBizAppilication.class, args);
