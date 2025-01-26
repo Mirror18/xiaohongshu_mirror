@@ -4,7 +4,9 @@ import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
 import com.mirror.xiaohongshu.user.biz.service.UserService;
+import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
 import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
+import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -45,4 +47,9 @@ public class UserController {
         return userService.register(registerUserReqDTO);
     }
 
+    @PostMapping("/findByPhone")
+    @ApiOperationLog(description = "手机号查询用户信息")
+    public Response<FindUserByPhoneRspDTO> findByPhone(@Validated @RequestBody FindUserByPhoneReqDTO findUserByPhoneReqDTO) {
+        return userService.findByPhone(findUserByPhoneReqDTO);
+    }
 }

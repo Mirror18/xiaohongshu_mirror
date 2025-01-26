@@ -2,7 +2,9 @@ package com.mirror.xiaohongshu.user.biz.service;
 
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
+import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
 import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
+import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 
 /**
  * @Auther: mirror
@@ -26,4 +28,12 @@ public interface UserService {
      * @return
      */
     Response<Long> register(RegisterUserReqDTO registerUserReqDTO);
+
+    /**
+     * 根据手机号查询用户信息
+     *
+     * @param findUserByPhoneReqDTO
+     * @return
+     */
+    Response<FindUserByPhoneRspDTO> findByPhone(FindUserByPhoneReqDTO findUserByPhoneReqDTO);
 }
