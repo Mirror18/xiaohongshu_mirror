@@ -4,6 +4,7 @@ import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.constant.ApiConstants;
 import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
 import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
+import com.mirror.xiaohongshu.user.dto.req.UpdateUserPasswordReqDTO;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +37,15 @@ public interface UserFeignApi {
      */
     @PostMapping(value = PREFIX + "/findByPhone")
     Response<FindUserByPhoneRspDTO> findByPhone(@RequestBody FindUserByPhoneReqDTO findUserByPhoneReqDTO);
+
+    /**
+     * 更新密码
+     *
+     * @param updateUserPasswordReqDTO
+     * @return
+     */
+    @PostMapping(value = PREFIX + "/password/update")
+    Response<?> updatePassword(@RequestBody UpdateUserPasswordReqDTO updateUserPasswordReqDTO);
 
 
 }

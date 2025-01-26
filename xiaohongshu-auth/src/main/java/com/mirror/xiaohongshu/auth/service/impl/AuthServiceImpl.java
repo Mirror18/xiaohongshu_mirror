@@ -3,18 +3,10 @@ package com.mirror.xiaohongshu.auth.service.impl;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
 import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
-import com.mirror.framework.common.enums.DeletedEnum;
-import com.mirror.framework.common.enums.StatusEnum;
 import com.mirror.framework.common.exception.BizException;
 import com.mirror.framework.common.response.Response;
-import com.mirror.framework.common.util.JsonUtils;
 import com.mirror.xiaohongshu.auth.constant.RedisKeyConstants;
-import com.mirror.xiaohongshu.auth.constant.RoleConstants;
-import com.mirror.xiaohongshu.auth.domain.dataobject.RoleDO;
-import com.mirror.xiaohongshu.auth.domain.dataobject.UserDO;
-import com.mirror.xiaohongshu.auth.domain.dataobject.UserRoleDO;
 import com.mirror.xiaohongshu.auth.domain.mapper.RoleDOMapper;
 import com.mirror.xiaohongshu.auth.domain.mapper.UserDOMapper;
 import com.mirror.xiaohongshu.auth.domain.mapper.UserRoleDOMapper;
@@ -24,22 +16,17 @@ import com.mirror.xiaohongshu.auth.enums.ResponseCodeEnum;
 import com.mirror.xiaohongshu.auth.model.vo.user.UpdatePasswordReqVO;
 import com.mirror.xiaohongshu.auth.model.vo.user.UserLoginReqVO;
 import com.mirror.xiaohongshu.auth.rpc.UserRpcService;
-import com.mirror.xiaohongshu.auth.service.UserService;
+import com.mirror.xiaohongshu.auth.service.AuthService;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -49,7 +36,7 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
 
     @Resource
     private UserDOMapper userDOMapper;
@@ -107,28 +94,37 @@ public class UserServiceImpl implements UserService {
                     throw new BizException(ResponseCodeEnum.VERIFICATION_CODE_ERROR);
                 }
 
-                // 通过手机号查询记录
-                UserDO userDO = userDOMapper.selectByPhone(phone);
+//                // 通过手机号查询记录
+//                UserDO userDO = userDOMapper.selectByPhone(phone);
+//
+//                log.info("==> 用户是否注册, phone: {}, userDO: {}", phone, JsonUtils.toJsonString(userDO));
+//
+//                // 判断是否注册
+//                if (Objects.isNull(userDO)) {
+////                    // 若此用户还没有注册，系统自动注册该用户
+////                    userId = registerUser(phone);
+//                    // RPC: 调用用户服务，注册用户
+//                    Long userIdTmp = userRpcService.registerUser(phone);
+//
+//                    // 若调用用户服务，返回的用户 ID 为空，则提示登录失败
+//                    if (Objects.isNull(userIdTmp)) {
+//                        throw new BizException(ResponseCodeEnum.LOGIN_FAIL);
+//                    }
+//
+//                    userId = userIdTmp;
+//                } else {
+//                    // 已注册，则获取其用户 ID
+//                    userId = userDO.getId();
+//                }
+                // RPC: 调用用户服务，注册用户
+                Long userIdTmp = userRpcService.registerUser(phone);
 
-                log.info("==> 用户是否注册, phone: {}, userDO: {}", phone, JsonUtils.toJsonString(userDO));
-
-                // 判断是否注册
-                if (Objects.isNull(userDO)) {
-//                    // 若此用户还没有注册，系统自动注册该用户
-//                    userId = registerUser(phone);
-                    // RPC: 调用用户服务，注册用户
-                    Long userIdTmp = userRpcService.registerUser(phone);
-
-                    // 若调用用户服务，返回的用户 ID 为空，则提示登录失败
-                    if (Objects.isNull(userIdTmp)) {
-                        throw new BizException(ResponseCodeEnum.LOGIN_FAIL);
-                    }
-
-                    userId = userIdTmp;
-                } else {
-                    // 已注册，则获取其用户 ID
-                    userId = userDO.getId();
+                // 若调用用户服务，返回的用户 ID 为空，则提示登录失败
+                if (Objects.isNull(userIdTmp)) {
+                    throw new BizException(ResponseCodeEnum.LOGIN_FAIL);
                 }
+
+                userId = userIdTmp;
                 break;
             case PASSWORD: // 密码登录
                 String password = userLoginReqVO.getPassword();
@@ -208,16 +204,19 @@ public class UserServiceImpl implements UserService {
         // 密码加密
         String encodePassword = passwordEncoder.encode(newPassword);
 
-        // 获取当前请求对应的用户 ID
-        Long userId = LoginUserContextHolder.getUserId();
+//        // 获取当前请求对应的用户 ID
+//        Long userId = LoginUserContextHolder.getUserId();
+//
+//        UserDO userDO = UserDO.builder()
+//                .id(userId)
+//                .password(encodePassword)
+//                .updateTime(LocalDateTime.now())
+//                .build();
+//        // 更新密码
+//        userDOMapper.updateByPrimaryKeySelective(userDO);
 
-        UserDO userDO = UserDO.builder()
-                .id(userId)
-                .password(encodePassword)
-                .updateTime(LocalDateTime.now())
-                .build();
-        // 更新密码
-        userDOMapper.updateByPrimaryKeySelective(userDO);
+        // RPC: 调用用户服务：更新密码
+        userRpcService.updatePassword(encodePassword);
 
         return Response.success();
     }

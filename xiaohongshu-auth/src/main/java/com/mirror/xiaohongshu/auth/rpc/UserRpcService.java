@@ -4,6 +4,7 @@ import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.api.UserFeignApi;
 import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
 import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
+import com.mirror.xiaohongshu.user.dto.req.UpdateUserPasswordReqDTO;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
@@ -55,5 +56,17 @@ public class UserRpcService {
         }
 
         return response.getData();
+    }
+
+    /**
+     * 密码更新
+     *
+     * @param encodePassword
+     */
+    public void updatePassword(String encodePassword) {
+        UpdateUserPasswordReqDTO updateUserPasswordReqDTO = new UpdateUserPasswordReqDTO();
+        updateUserPasswordReqDTO.setEncodePassword(encodePassword);
+
+        userFeignApi.updatePassword(updateUserPasswordReqDTO);
     }
 }

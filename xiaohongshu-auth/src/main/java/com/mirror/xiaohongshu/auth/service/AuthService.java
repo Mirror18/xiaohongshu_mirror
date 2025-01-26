@@ -9,7 +9,7 @@ import com.mirror.xiaohongshu.auth.model.vo.user.UserLoginReqVO;
  * @Date: 2025/1/15 11:48
  * @Description:
  */
-public interface UserService {
+public interface AuthService {
 
     /**
      * 登录与注册

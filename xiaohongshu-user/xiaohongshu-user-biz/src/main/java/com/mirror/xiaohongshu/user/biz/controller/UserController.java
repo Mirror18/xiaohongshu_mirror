@@ -6,6 +6,7 @@ import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
 import com.mirror.xiaohongshu.user.biz.service.UserService;
 import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
 import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
+import com.mirror.xiaohongshu.user.dto.req.UpdateUserPasswordReqDTO;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +52,11 @@ public class UserController {
     @ApiOperationLog(description = "手机号查询用户信息")
     public Response<FindUserByPhoneRspDTO> findByPhone(@Validated @RequestBody FindUserByPhoneReqDTO findUserByPhoneReqDTO) {
         return userService.findByPhone(findUserByPhoneReqDTO);
+    }
+
+    @PostMapping("/password/update")
+    @ApiOperationLog(description = "密码更新")
+    public Response<?> updatePassword(@Validated @RequestBody UpdateUserPasswordReqDTO updateUserPasswordReqDTO) {
+        return userService.updatePassword(updateUserPasswordReqDTO);
     }
 }
