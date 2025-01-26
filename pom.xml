@@ -24,6 +24,8 @@
         <!-- 对象存储服务 -->
         <module>xiaohongshu-oss</module>
         <module>xiaohongshu-user</module>
+        <!-- KV 键值存储服务 -->
+        <module>xiaohongshu-kv</module>
     </modules>
 
     <properties>
