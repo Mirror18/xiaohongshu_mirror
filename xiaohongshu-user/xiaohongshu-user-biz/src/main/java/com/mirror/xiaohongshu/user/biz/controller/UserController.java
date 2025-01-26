@@ -1,5 +1,6 @@
 package com.mirror.xiaohongshu.user.biz.controller;
 
+import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
 import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
@@ -57,6 +58,7 @@ public class UserController {
     @PostMapping("/password/update")
     @ApiOperationLog(description = "密码更新")
     public Response<?> updatePassword(@Validated @RequestBody UpdateUserPasswordReqDTO updateUserPasswordReqDTO) {
+        log.info("当前用户ID:{}", LoginUserContextHolder.getUserId());
         return userService.updatePassword(updateUserPasswordReqDTO);
     }
 }

@@ -7,9 +7,9 @@ import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
 import com.mirror.framework.common.exception.BizException;
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.auth.constant.RedisKeyConstants;
-import com.mirror.xiaohongshu.auth.domain.mapper.RoleDOMapper;
-import com.mirror.xiaohongshu.auth.domain.mapper.UserDOMapper;
-import com.mirror.xiaohongshu.auth.domain.mapper.UserRoleDOMapper;
+//import com.mirror.xiaohongshu.auth.domain.mapper.RoleDOMapper;
+//import com.mirror.xiaohongshu.auth.domain.mapper.UserDOMapper;
+//import com.mirror.xiaohongshu.auth.domain.mapper.UserRoleDOMapper;
 import com.mirror.xiaohongshu.auth.enums.LoginTypeEnum;
 import com.mirror.xiaohongshu.auth.enums.ResponseCodeEnum;
 //import com.mirror.xiaohongshu.auth.filter.LoginUserContextHolder;
@@ -38,16 +38,16 @@ import java.util.Objects;
 @Slf4j
 public class AuthServiceImpl implements AuthService {
 
-    @Resource
-    private UserDOMapper userDOMapper;
+//    @Resource
+//    private UserDOMapper userDOMapper;
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
-    @Resource
-    private UserRoleDOMapper userRoleDOMapper;
-    @Resource
-    private TransactionTemplate transactionTemplate;
-    @Resource
-    private RoleDOMapper roleDOMapper;
+//    @Resource
+//    private UserRoleDOMapper userRoleDOMapper;
+//    @Resource
+//    private TransactionTemplate transactionTemplate;
+//    @Resource
+//    private RoleDOMapper roleDOMapper;
 
     @Resource(name = "taskExecutor")
     //@Autowired

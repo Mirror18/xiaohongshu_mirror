@@ -1,6 +1,6 @@
 package com.mirror.xiaohongshu.auth;
 
-import org.mybatis.spring.annotation.MapperScan;
+//import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -12,7 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  * @Description:
  */
 @SpringBootApplication
-@MapperScan("com.mirror.xiaohongshu.auth.domain.mapper")
+//@MapperScan("com.mirror.xiaohongshu.auth.domain.mapper")
 @EnableFeignClients(basePackages = "com.mirror.xiaohongshu")
 public class XiaohongshuAuthApplication {
     public static void main(String[] args) {

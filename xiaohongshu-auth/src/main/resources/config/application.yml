@@ -4,9 +4,9 @@ spring:
     # 激活环境
     active: dev
 
-mybatis:
-  # MyBatis xml 配置文件路径
-  mapper-locations: classpath:/mapper/**/*.xml
+#mybatis:
+#  # MyBatis xml 配置文件路径
+#  mapper-locations: classpath:/mapper/**/*.xml
 
 ############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
 sa-token:

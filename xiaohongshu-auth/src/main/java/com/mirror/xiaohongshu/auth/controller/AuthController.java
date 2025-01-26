@@ -1,5 +1,6 @@
 package com.mirror.xiaohongshu.auth.controller;
 
+import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
 import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.auth.model.vo.user.UpdatePasswordReqVO;

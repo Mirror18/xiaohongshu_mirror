@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private OssRpcService ossRpcService;
+
     /**
      * 更新用户信息
      *
@@ -153,6 +154,7 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private RoleDOMapper roleDOMapper;
+
     /**
      * 用户注册
      *
