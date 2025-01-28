@@ -27,6 +27,7 @@
         <!-- KV 键值存储服务 -->
         <module>xiaohongshu-kv</module>
         <module>xiaohongshu-distributed-id-generator</module>
+        <module>xiaohongshu-note</module>
     </modules>
 
     <properties>
