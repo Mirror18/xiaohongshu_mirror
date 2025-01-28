@@ -101,6 +101,12 @@
             <groupId>com.mirror</groupId>
             <artifactId>xiaohongshu-user-api</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohongshu-distributed-id-generator-api</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

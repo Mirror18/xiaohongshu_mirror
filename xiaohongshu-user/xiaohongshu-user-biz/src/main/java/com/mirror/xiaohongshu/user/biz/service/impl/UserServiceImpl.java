@@ -7,7 +7,6 @@ import com.mirror.framework.common.enums.StatusEnum;
 import com.mirror.framework.common.exception.BizException;
 import com.mirror.framework.common.response.Response;
 import com.mirror.framework.common.util.JsonUtils;
-import com.mirror.xiaohongshu.oss.api.FileFeignApi;
 import com.mirror.xiaohongshu.user.biz.constant.RedisKeyConstants;
 import com.mirror.xiaohongshu.user.biz.constant.RoleConstants;
 import com.mirror.xiaohongshu.user.biz.domain.dataobject.RoleDO;
@@ -19,6 +18,7 @@ import com.mirror.xiaohongshu.user.biz.domain.mapper.UserRoleDOMapper;
 import com.mirror.xiaohongshu.user.biz.enums.ResponseCodeEnum;
 import com.mirror.xiaohongshu.user.biz.enums.SexEnum;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
+import com.mirror.xiaohongshu.user.biz.rpc.DistributedIdGeneratorRpcService;
 import com.mirror.xiaohongshu.user.biz.rpc.OssRpcService;
 import com.mirror.xiaohongshu.user.biz.service.UserService;
 import com.mirror.xiaohongshu.user.biz.util.ParamUtils;
@@ -154,6 +154,8 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     private RoleDOMapper roleDOMapper;
+    @Resource
+    private DistributedIdGeneratorRpcService distributedIdGeneratorRpcService;
 
     /**
      * 用户注册
@@ -177,12 +179,20 @@ public class UserServiceImpl implements UserService {
         }
 
         // 否则注册新用户
-        // 获取全局自增的小红书 ID
-        Long xiaohongshuId = redisTemplate.opsForValue().increment(RedisKeyConstants.XIAOHONGSHU_ID_GENERATOR_KEY);
+//        // 获取全局自增的小红书 ID
+//        Long xiaohongshuId = redisTemplate.opsForValue().increment(RedisKeyConstants.XIAOHONGSHU_ID_GENERATOR_KEY);
+
+        // RPC: 调用分布式 ID 生成服务生成小哈书 ID
+        String xiaohongshuId = distributedIdGeneratorRpcService.getXiaohongshuId();
+
+        // RPC: 调用分布式 ID 生成服务生成用户 ID
+        String userIdStr = distributedIdGeneratorRpcService.getUserId();
+        Long userId = Long.valueOf(userIdStr);
 
         UserDO userDO = UserDO.builder()
+                .id(userId)
                 .phone(phone)
-                .xiaohongshuId(String.valueOf(xiaohongshuId)) // 自动生成小红书号 ID
+                .xiaohongshuId(xiaohongshuId) // 自动生成小红书号 ID
                 .nickname("小红薯" + xiaohongshuId) // 自动生成昵称, 如：小红薯10000
                 .status(StatusEnum.ENABLE.getValue()) // 状态为启用
                 .createTime(LocalDateTime.now())
@@ -194,7 +204,7 @@ public class UserServiceImpl implements UserService {
         userDOMapper.insert(userDO);
 
         // 获取刚刚添加入库的用户 ID
-        Long userId = userDO.getId();
+        // Long userId = userDO.getId();
 
         // 给该用户分配一个默认角色
         UserRoleDO userRoleDO = UserRoleDO.builder()
