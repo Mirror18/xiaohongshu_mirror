@@ -90,6 +90,13 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
+        <!-- Caffeine 本地缓存 -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>com.mirror</groupId>
             <artifactId>xiaohongshu-distributed-id-generator-api</artifactId>
