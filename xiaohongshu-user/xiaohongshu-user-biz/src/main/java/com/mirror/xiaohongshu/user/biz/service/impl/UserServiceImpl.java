@@ -1,6 +1,8 @@
 package com.mirror.xiaohongshu.user.biz.service.impl;
 
 import cn.hutool.core.util.RandomUtil;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import com.google.common.base.Preconditions;
 import com.mirror.framework.biz.context.holder.LoginUserContextHolder;
 import com.mirror.framework.common.enums.DeletedEnum;
@@ -293,14 +295,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public Response<FindUserByIdRspDTO> findById(FindUserByIdReqDTO findUserByIdReqDTO) {
         Long userId = findUserByIdReqDTO.getId();
+
+        // 先从本地缓存中查询
+        FindUserByIdRspDTO findUserByIdRspDTOLocalCache = LOCAL_CACHE.getIfPresent(userId);
+        if (Objects.nonNull(findUserByIdRspDTOLocalCache)) {
+            log.info("==> 命中了本地缓存；{}", findUserByIdRspDTOLocalCache);
+            return Response.success(findUserByIdRspDTOLocalCache);
+        }
+
         // 用户缓存 Redis Key
         String userInfoRedisKey = RedisKeyConstants.buildUserInfoKey(userId);
-        // 先从 Redis 缓存中查询
+        // 再去 Redis 缓存中查询
         String userInfoRedisValue = (String) redisTemplate.opsForValue().get(userInfoRedisKey);
         // 若 Redis 缓存中存在该用户信息
         if (StringUtils.isNotBlank(userInfoRedisValue)) {
             // 将存储的 Json 字符串转换成对象，并返回
             FindUserByIdRspDTO findUserByIdRspDTO = JsonUtils.parseObject(userInfoRedisValue, FindUserByIdRspDTO.class);
+            // 异步线程中将用户信息存入本地缓存
+            threadPoolTaskExecutor.submit(() -> {
+                if (Objects.nonNull(findUserByIdRspDTO)) {
+                    // 写入本地缓存
+                    LOCAL_CACHE.put(userId, findUserByIdRspDTO);
+                }
+            });
             return Response.success(findUserByIdRspDTO);
         }
 
@@ -336,4 +353,15 @@ public class UserServiceImpl implements UserService {
 
         return Response.success(findUserByIdRspDTO);
     }
+
+    /**
+     * 用户信息本地缓存
+     */
+    private static final Cache<Long, FindUserByIdRspDTO> LOCAL_CACHE = Caffeine.newBuilder()
+            .initialCapacity(10000) // 设置初始容量为 10000 个条目
+            .maximumSize(10000) // 设置缓存的最大容量为 10000 个条目
+            .expireAfterWrite(1, TimeUnit.HOURS) // 设置缓存条目在写入后 1 小时过期
+            .build();
+
 }
+
