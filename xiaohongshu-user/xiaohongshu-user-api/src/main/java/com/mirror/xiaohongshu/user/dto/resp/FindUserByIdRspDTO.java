@@ -1,0 +1,33 @@
+package com.mirror.xiaohongshu.user.dto.resp;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @Auther: mirror
+ * @Date: 2025/1/30 03:20
+ * @Description:
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class FindUserByIdRspDTO {
+
+    /**
+     * 用户 ID
+     */
+    private Long id;
+
+    /**
+     * 昵称
+     */
+    private String nickName;
+
+    /**
+     * 头像
+     */
+    private String avatar;
+}
