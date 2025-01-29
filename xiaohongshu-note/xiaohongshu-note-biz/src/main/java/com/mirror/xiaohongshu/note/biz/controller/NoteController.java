@@ -2,6 +2,8 @@ package com.mirror.xiaohongshu.note.biz.controller;
 
 import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
 import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.note.biz.model.vo.FindNoteDetailReqVO;
+import com.mirror.xiaohongshu.note.biz.model.vo.FindNoteDetailRspVO;
 import com.mirror.xiaohongshu.note.biz.model.vo.PublishNoteReqVO;
 import com.mirror.xiaohongshu.note.biz.service.NoteService;
 import jakarta.annotation.Resource;
@@ -31,4 +33,9 @@ public class NoteController {
         return noteService.publishNote(publishNoteReqVO);
     }
 
+    @PostMapping(value = "/detail")
+    @ApiOperationLog(description = "笔记详情")
+    public Response<FindNoteDetailRspVO> findNoteDetail(@Validated @RequestBody FindNoteDetailReqVO findNoteDetailReqVO) {
+        return noteService.findNoteDetail(findNoteDetailReqVO);
+    }
 }

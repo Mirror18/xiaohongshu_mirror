@@ -1,6 +1,8 @@
 package com.mirror.xiaohongshu.note.biz.service;
 
 import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.note.biz.model.vo.FindNoteDetailReqVO;
+import com.mirror.xiaohongshu.note.biz.model.vo.FindNoteDetailRspVO;
 import com.mirror.xiaohongshu.note.biz.model.vo.PublishNoteReqVO;
 
 /**
@@ -16,5 +18,12 @@ public interface NoteService {
      * @return
      */
     Response<?> publishNote(PublishNoteReqVO publishNoteReqVO);
+
+    /**
+     * 笔记详情
+     * @param findNoteDetailReqVO
+     * @return
+     */
+    Response<FindNoteDetailRspVO> findNoteDetail(FindNoteDetailReqVO findNoteDetailReqVO);
 
 }

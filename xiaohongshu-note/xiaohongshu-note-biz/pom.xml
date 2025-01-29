@@ -99,6 +99,10 @@
             <groupId>com.mirror</groupId>
             <artifactId>xiaohongshu-kv-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohongshu-user-api</artifactId>
+        </dependency>
 
     </dependencies>
 
