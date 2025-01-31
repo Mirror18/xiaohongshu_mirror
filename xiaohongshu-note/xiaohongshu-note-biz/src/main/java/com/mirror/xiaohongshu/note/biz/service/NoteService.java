@@ -1,10 +1,7 @@
 package com.mirror.xiaohongshu.note.biz.service;
 
 import com.mirror.framework.common.response.Response;
-import com.mirror.xiaohongshu.note.biz.model.vo.FindNoteDetailReqVO;
-import com.mirror.xiaohongshu.note.biz.model.vo.FindNoteDetailRspVO;
-import com.mirror.xiaohongshu.note.biz.model.vo.PublishNoteReqVO;
-import com.mirror.xiaohongshu.note.biz.model.vo.UpdateNoteReqVO;
+import com.mirror.xiaohongshu.note.biz.model.vo.*;
 
 /**
  * @Auther: mirror
@@ -40,4 +37,10 @@ public interface NoteService {
      */
     void deleteNoteLocalCache(Long noteId);
 
+    /**
+     * 删除笔记
+     * @param deleteNoteReqVO
+     * @return
+     */
+    Response<?> deleteNote(DeleteNoteReqVO deleteNoteReqVO);
 }
