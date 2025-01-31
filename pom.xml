@@ -28,6 +28,7 @@
         <module>xiaohongshu-kv</module>
         <module>xiaohongshu-distributed-id-generator</module>
         <module>xiaohongshu-note</module>
+        <module>xiaohongshu-user-relation</module>
     </modules>
 
     <properties>
