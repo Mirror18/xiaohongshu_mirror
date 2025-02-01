@@ -94,7 +94,14 @@
             <groupId>com.mirror</groupId>
             <artifactId>xiaohongshu-user-api</artifactId>
         </dependency>
-        
+
+        <!-- Rocket MQ -->
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <build>
