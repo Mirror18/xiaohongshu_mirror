@@ -15,7 +15,9 @@ import com.mirror.xiaohongshu.user.relation.biz.domain.mapper.FollowingDOMapper;
 import com.mirror.xiaohongshu.user.relation.biz.enums.LuaResultEnum;
 import com.mirror.xiaohongshu.user.relation.biz.enums.ResponseCodeEnum;
 import com.mirror.xiaohongshu.user.relation.biz.model.dto.FollowUserMqDTO;
+import com.mirror.xiaohongshu.user.relation.biz.model.dto.UnfollowUserMqDTO;
 import com.mirror.xiaohongshu.user.relation.biz.model.vo.FollowUserReqVO;
+import com.mirror.xiaohongshu.user.relation.biz.model.vo.UnfollowUserReqVO;
 import com.mirror.xiaohongshu.user.relation.biz.rpc.UserRpcService;
 import com.mirror.xiaohongshu.user.relation.biz.service.RelationService;
 import jakarta.annotation.Resource;
@@ -123,7 +125,6 @@ public class RelationServiceImpl implements RelationService {
 //                    script2.setScriptSource(new ResourceScriptSource(new ClassPathResource("/lua/follow_add_and_expire.lua")));
 //                    script2.setResultType(Long.class);
 //
-//                    // TODO: 可以根据用户类型，设置不同的过期时间，若当前用户为大V, 则可以过期时间设置的长些或者不设置过期时间；如不是，则设置的短些
 //                    // 如何判断呢？可以从计数服务获取用户的粉丝数，目前计数服务还没创建，则暂时采用统一的过期策略
 //                    redisTemplate.execute(script2, Collections.singletonList(followingRedisKey), followUserId, timestamp, expireSeconds);
 //                } else { // 若记录不为空，则将关注关系数据全量同步到 Redis 中，并设置过期时间；
@@ -241,5 +242,74 @@ public class RelationServiceImpl implements RelationService {
 
         luaArgs[argsLength - 1] = expireSeconds; // 最后一个参数是 ZSet 的过期时间
         return luaArgs;
+    }
+
+    /**
+     * 取关用户
+     *
+     * @param unfollowUserReqVO
+     * @return
+     */
+    @Override
+    public Response<?> unfollow(UnfollowUserReqVO unfollowUserReqVO) {
+        // 想要取关了用户 ID
+        Long unfollowUserId = unfollowUserReqVO.getUnfollowUserId();
+        // 当前登录用户 ID
+        Long userId = LoginUserContextHolder.getUserId();
+
+        // 无法取关自己
+        if (Objects.equals(userId, unfollowUserId)) {
+            throw new BizException(ResponseCodeEnum.CANT_UNFOLLOW_YOUR_SELF);
+        }
+
+        // 校验关注的用户是否存在
+        FindUserByIdRspDTO findUserByIdRspDTO = userRpcService.findById(unfollowUserId);
+
+        if (Objects.isNull(findUserByIdRspDTO)) {
+            throw new BizException(ResponseCodeEnum.FOLLOW_USER_NOT_EXISTED);
+        }
+
+        // 必须是关注了的用户，才能取关
+        String followingRedisKey = RedisKeyConstants.buildUserFollowingKey(userId);
+        Double score = redisTemplate.opsForZSet().score(followingRedisKey, unfollowUserId);
+
+        if (Objects.isNull(score)) {
+            throw new BizException(ResponseCodeEnum.NOT_FOLLOWED);
+        }
+
+        // 从自己的关注列表中删除
+        redisTemplate.opsForZSet().remove(followingRedisKey, unfollowUserId);
+
+        // 发送 MQ
+        // 构建消息体 DTO
+        UnfollowUserMqDTO unfollowUserMqDTO = UnfollowUserMqDTO.builder()
+                .userId(userId)
+                .unfollowUserId(unfollowUserId)
+                .createTime(LocalDateTime.now())
+                .build();
+
+        // 构建消息对象，并将 DTO 转成 Json 字符串设置到消息体中
+        Message<String> message = MessageBuilder.withPayload(JsonUtils.toJsonString(unfollowUserMqDTO))
+                .build();
+
+        // 通过冒号连接, 可让 MQ 发送给主题 Topic 时，携带上标签 Tag
+        String destination = MQConstants.TOPIC_FOLLOW_OR_UNFOLLOW + ":" + MQConstants.TAG_UNFOLLOW;
+
+        log.info("==> 开始发送取关操作 MQ, 消息体: {}", unfollowUserMqDTO);
+
+        // 异步发送 MQ 消息，提升接口响应速度
+        rocketMQTemplate.asyncSend(destination, message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("==> MQ 发送成功，SendResult: {}", sendResult);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.error("==> MQ 发送异常: ", throwable);
+            }
+        });
+
+        return Response.success();
     }
 }
