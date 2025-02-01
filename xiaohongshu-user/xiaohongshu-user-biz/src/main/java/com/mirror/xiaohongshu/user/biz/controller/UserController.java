@@ -5,10 +5,7 @@ import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
 import com.mirror.xiaohongshu.user.biz.service.UserService;
-import com.mirror.xiaohongshu.user.dto.req.FindUserByIdReqDTO;
-import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
-import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
-import com.mirror.xiaohongshu.user.dto.req.UpdateUserPasswordReqDTO;
+import com.mirror.xiaohongshu.user.dto.req.*;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByIdRspDTO;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
 import jakarta.annotation.Resource;
@@ -19,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @Auther: mirror
@@ -68,5 +67,12 @@ public class UserController {
     @ApiOperationLog(description = "查询用户信息")
     public Response<FindUserByIdRspDTO> findById(@Validated @RequestBody FindUserByIdReqDTO findUserByIdReqDTO) {
         return userService.findById(findUserByIdReqDTO);
+    }
+
+
+    @PostMapping("/findByIds")
+    @ApiOperationLog(description = "批量查询用户信息")
+    public Response<List<FindUserByIdRspDTO>> findByIds(@Validated @RequestBody FindUsersByIdsReqDTO findUsersByIdsReqDTO) {
+        return userService.findByIds(findUsersByIdsReqDTO);
     }
 }

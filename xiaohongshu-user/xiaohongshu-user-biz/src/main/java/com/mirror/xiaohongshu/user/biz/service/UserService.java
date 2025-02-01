@@ -2,12 +2,11 @@ package com.mirror.xiaohongshu.user.biz.service;
 
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.biz.model.vo.UpdateUserInfoReqVO;
-import com.mirror.xiaohongshu.user.dto.req.FindUserByIdReqDTO;
-import com.mirror.xiaohongshu.user.dto.req.FindUserByPhoneReqDTO;
-import com.mirror.xiaohongshu.user.dto.req.RegisterUserReqDTO;
-import com.mirror.xiaohongshu.user.dto.req.UpdateUserPasswordReqDTO;
+import com.mirror.xiaohongshu.user.dto.req.*;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByIdRspDTO;
 import com.mirror.xiaohongshu.user.dto.resp.FindUserByPhoneRspDTO;
+
+import java.util.List;
 
 /**
  * @Auther: mirror
@@ -55,5 +54,13 @@ public interface UserService {
      * @return
      */
     Response<FindUserByIdRspDTO> findById(FindUserByIdReqDTO findUserByIdReqDTO);
+
+    /**
+     * 批量根据用户 ID 查询用户信息
+     *
+     * @param findUsersByIdsReqDTO
+     * @return
+     */
+    Response<List<FindUserByIdRspDTO>> findByIds(FindUsersByIdsReqDTO findUsersByIdsReqDTO);
 
 }
