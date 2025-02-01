@@ -2,6 +2,7 @@ package com.mirror.xiaohongshu.user.relation.biz.service;
 
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.user.relation.biz.model.vo.FollowUserReqVO;
+import com.mirror.xiaohongshu.user.relation.biz.model.vo.UnfollowUserReqVO;
 
 /**
  * @Auther: mirror
@@ -16,5 +17,11 @@ public interface RelationService {
      * @return
      */
     Response<?> follow(FollowUserReqVO followUserReqVO);
+    /**
+     * 取关用户
+     * @param unfollowUserReqVO
+     * @return
+     */
+    Response<?> unfollow(UnfollowUserReqVO unfollowUserReqVO);
 
 }
