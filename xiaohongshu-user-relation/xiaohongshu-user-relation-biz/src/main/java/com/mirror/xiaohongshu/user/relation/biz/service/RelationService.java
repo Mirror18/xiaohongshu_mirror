@@ -1,6 +1,9 @@
 package com.mirror.xiaohongshu.user.relation.biz.service;
 
+import com.mirror.framework.common.response.PageResponse;
 import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.user.relation.biz.model.vo.FindFollowingListReqVO;
+import com.mirror.xiaohongshu.user.relation.biz.model.vo.FindFollowingUserRspVO;
 import com.mirror.xiaohongshu.user.relation.biz.model.vo.FollowUserReqVO;
 import com.mirror.xiaohongshu.user.relation.biz.model.vo.UnfollowUserReqVO;
 
@@ -24,4 +27,11 @@ public interface RelationService {
      */
     Response<?> unfollow(UnfollowUserReqVO unfollowUserReqVO);
 
+
+    /**
+     * 查询关注列表
+     * @param findFollowingListReqVO
+     * @return
+     */
+    PageResponse<FindFollowingUserRspVO> findFollowingList(FindFollowingListReqVO findFollowingListReqVO);
 }
