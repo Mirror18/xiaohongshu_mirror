@@ -75,5 +75,22 @@
                enableSelectByExample="false"
                selectByExampleQueryId="false"/>
 
+        <!-- 需要生成的表-实体类 -->
+        <table tableName="t_note_collection" domainObjectName="NoteCollectionDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+
+        <!-- 需要生成的表-实体类 -->
+        <table tableName="t_note_like" domainObjectName="NoteLikeDO"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+
+
     </context>
 </generatorConfiguration>
