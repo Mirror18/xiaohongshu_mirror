@@ -955,6 +955,11 @@ public class NoteServiceImpl implements NoteService {
         // 用户点赞列表 ZSet Key
         String userNoteLikeZSetKey = RedisKeyConstants.buildUserNoteLikeZSetKey(userId);
         redisTemplate.opsForZSet().remove(userNoteLikeZSetKey, noteId);
+//这里应该是查询数据库的，因为布隆过滤器是无法删除数据的，所以这里有两个解决此业务逻辑的办法
+        // 第一是删除布隆过滤器并重建，纯属是有点大病
+        //第二是查询数据库，虽然zset是可以帮忙判断是否存在，但是因为zset有过期时间
+        //所以根本无法判断是否存在还是过期了，
+        //要是完全可以的话，就是查询数据库，那样会容易造成缓存雪崩。所以我选择在数据落库的时候进行一个校验。
 
         // 4. 发送 MQ, 数据更新落库
         // 构建消息体 DTO

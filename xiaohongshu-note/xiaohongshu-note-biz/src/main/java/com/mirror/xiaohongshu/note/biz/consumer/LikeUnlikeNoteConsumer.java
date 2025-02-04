@@ -169,9 +169,15 @@ public class LikeUnlikeNoteConsumer implements RocketMQListener<Message> {
                 .status(type)
                 .build();
 
+//        // 查询数据库校验
+//        int count1 = noteLikeDOMapper.selectNoteIsLiked(userId, noteId);
+//        if(count1 == 0){
+////            throw new BizException(ResponseCodeEnum.NOTE_NOT_LIKED);
+//        }
         // 取消点赞：记录更新
-        int count = noteLikeDOMapper.update2UnlikeByUserIdAndNoteId(noteLikeDO);
-
+//        else {
+            int count2 = noteLikeDOMapper.update2UnlikeByUserIdAndNoteId(noteLikeDO);
+//        }
         // TODO: 发送计数 MQ
     }
 
