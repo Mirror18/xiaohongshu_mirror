@@ -98,4 +98,11 @@
   </insert>
 
 
+  <insert id="insertOrUpdateCollectTotalByNoteId" parameterType="map">
+    INSERT INTO t_note_count (note_id, collect_total)
+    VALUES (#{noteId}, #{count})
+    ON DUPLICATE KEY UPDATE collect_total = collect_total + (#{count});
+  </insert>
+
+
 </mapper>
