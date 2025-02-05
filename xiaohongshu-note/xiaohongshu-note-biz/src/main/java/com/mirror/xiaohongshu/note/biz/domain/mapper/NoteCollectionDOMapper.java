@@ -58,4 +58,11 @@ public interface NoteCollectionDOMapper {
      */
     int insertOrUpdate(NoteCollectionDO noteCollectionDO);
 
+    /**
+     * 取消收藏
+     * @param noteCollectionDO
+     * @return
+     */
+    int update2UnCollectByUserIdAndNoteId(NoteCollectionDO noteCollectionDO);
+
 }
