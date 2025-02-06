@@ -60,7 +60,7 @@ spring:
 
 logging:
   level:
-    com.mirror.xiaohongshu.user.biz.domain.mapper: debug
+    com.mirror.xiaohongshu.note.biz.domain.mapper: debug
 
 rocketmq:
   name-server: 127.0.0.1:9876 # name server 地址

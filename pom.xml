@@ -30,6 +30,7 @@
         <module>xiaohongshu-note</module>
         <module>xiaohongshu-user-relation</module>
         <module>xiaohongshu-count</module>
+        <module>xiaohongshu-data-align</module>
     </modules>
 
     <properties>
