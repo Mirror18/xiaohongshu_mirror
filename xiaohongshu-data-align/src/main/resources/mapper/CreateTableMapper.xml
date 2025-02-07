@@ -79,7 +79,7 @@
         CREATE TABLE IF NOT EXISTS `t_data_align_note_publish_count_temp_${tableNameSuffix}`
         (
             `id`      bigint unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-            `note_id` bigint unsigned NOT NULL COMMENT '笔记ID',
+            `note_id` bigint unsigned NOT NULL COMMENT '用户ID',
             PRIMARY KEY (`id`) USING BTREE,
             UNIQUE KEY `uk_note_id` (`note_id`)
         ) ENGINE = InnoDB
