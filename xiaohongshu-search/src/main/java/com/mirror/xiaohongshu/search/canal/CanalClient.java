@@ -52,6 +52,8 @@ public class CanalClient implements DisposableBean {
         canalConnector.subscribe(canalProperties.getSubscribe());
         // 回滚 Canal 消费者的位点，回滚到上次提交的消费位置
         canalConnector.rollback();
+
+        log.info("已连接");
         return canalConnector;
     }
 
@@ -63,6 +65,7 @@ public class CanalClient implements DisposableBean {
     public void destroy() throws Exception {
         if (Objects.nonNull(canalConnector)) {
             // 断开 canalConnector 与 Canal 服务的连接
+            log.info("已经销毁");
             canalConnector.disconnect();
         }
     }
