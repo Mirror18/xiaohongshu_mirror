@@ -1,6 +1,5 @@
 package com.mirror.xiaohongshu.search.domain.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -10,7 +9,6 @@ import java.util.Map;
  * @Date: 2025/2/8 17:30
  * @Description:
  */
-@Mapper
 public interface SelectMapper {
 
     /**

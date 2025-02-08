@@ -8,8 +8,8 @@ elasticsearch:
 canal: # Canal 配置
   address: 127.0.0.1:11111 # 链接地址
   destination: example # 数据目标
-  username: #canal # 数据库用户名
-  password: #canal # 数据库密码
+  username: canal # 数据库用户名
+  password: canal # 数据库密码
   subscribe: xiaohongshu.t_note,xiaohongshu.t_user # 订阅规则，只订阅笔记表和用户表
   batchSize: 1000 # 一批次拉取数据量
 
@@ -53,3 +53,7 @@ spring:
         wall: # 防火墙
           config:
             multi-statement-allow: true
+
+logging:
+  level:
+    com.mirror.xiaohongshu.search.domain.mapper: debug

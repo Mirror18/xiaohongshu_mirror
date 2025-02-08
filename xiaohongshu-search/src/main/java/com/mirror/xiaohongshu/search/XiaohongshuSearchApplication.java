@@ -1,5 +1,6 @@
 package com.mirror.xiaohongshu.search;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
@@ -10,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableScheduling
+@MapperScan("com.mirror.xiaohongshu.search.domain.mapper")
 public class XiaohongshuSearchApplication {
     public static void main(String[] args) {
         org.springframework.boot.SpringApplication.run(XiaohongshuSearchApplication.class, args);
