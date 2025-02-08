@@ -18,7 +18,7 @@ import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.lucene.search.function.CombineFunction;
 import org.elasticsearch.common.lucene.search.function.FieldValueFactorFunction;
 import org.elasticsearch.common.lucene.search.function.FunctionScoreQuery;
-import org.elasticsearch.index.query.QueryBuilder;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.functionscore.FieldValueFactorFunctionBuilder;
 import org.elasticsearch.index.query.functionscore.FunctionScoreQueryBuilder;
@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Auther: mirror
@@ -60,6 +61,9 @@ public class NoteServiceImpl implements NoteService {
         // 当前页码
         Integer pageNo = searchNoteReqVO.getPageNo();
 
+        // 笔记类型
+        Integer type = searchNoteReqVO.getType();
+
         // 构建 SearchRequest，指定要查询的索引
         SearchRequest searchRequest = new SearchRequest(NoteIndex.NAME);
 
@@ -74,11 +78,16 @@ public class NoteServiceImpl implements NoteService {
         //         }
         //       },
         // 创建查询条件
-        QueryBuilder queryBuilder = QueryBuilders.multiMatchQuery(keyword)
-                .field(NoteIndex.FIELD_NOTE_TITLE, 2.0f) // 手动设置笔记标题的权重值为 2.0
-                .field(NoteIndex.FIELD_NOTE_TOPIC) // 不设置，权重默认为 1.0
-                ;
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(
+                QueryBuilders.multiMatchQuery(keyword)
+                        .field(NoteIndex.FIELD_NOTE_TITLE, 2.0f) // 手动设置笔记标题的权重值为 2.0
+                        .field(NoteIndex.FIELD_NOTE_TOPIC) // 不设置，权重默认为 1.0
+        );
 
+        // 若勾选了笔记类型，添加过滤条件
+        if (Objects.nonNull(type)) {
+            boolQueryBuilder.filter(QueryBuilders.termQuery(NoteIndex.FIELD_NOTE_TYPE, type));
+        }
 
         // 创建 FilterFunctionBuilder 数组
         // "functions": [
@@ -134,7 +143,7 @@ public class NoteServiceImpl implements NoteService {
         // 构建 function_score 查询
         // "score_mode": "sum",
         // "boost_mode": "sum"
-        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(queryBuilder,
+        FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(boolQueryBuilder,
                         filterFunctionBuilders)
                 .scoreMode(FunctionScoreQuery.ScoreMode.SUM) // score_mode 为 sum
                 .boostMode(CombineFunction.SUM); // boost_mode 为 sum
