@@ -337,10 +337,13 @@ public class NoteServiceImpl implements NoteService {
                 String title = (String) sourceAsMap.get(NoteIndex.FIELD_NOTE_TITLE);
                 String avatar = (String) sourceAsMap.get(NoteIndex.FIELD_NOTE_AVATAR);
                 String nickname = (String) sourceAsMap.get(NoteIndex.FIELD_NOTE_NICKNAME);
+
                 // 获取更新时间
                 String updateTimeStr = (String) sourceAsMap.get(NoteIndex.FIELD_NOTE_UPDATE_TIME);
                 LocalDateTime updateTime = LocalDateTime.parse(updateTimeStr, DateConstants.DATE_FORMAT_Y_M_D_H_M_S);
                 Integer likeTotal = (Integer) sourceAsMap.get(NoteIndex.FIELD_NOTE_LIKE_TOTAL);
+                Integer commentTotal = (Integer) sourceAsMap.get(NoteIndex.FIELD_NOTE_COMMENT_TOTAL);
+                Integer collectTotal = (Integer) sourceAsMap.get(NoteIndex.FIELD_NOTE_COLLECT_TOTAL);
 
                 // 获取高亮字段
                 String highlightedTitle = null;
@@ -357,8 +360,10 @@ public class NoteServiceImpl implements NoteService {
                         .highlightTitle(highlightedTitle)
                         .avatar(avatar)
                         .nickname(nickname)
-                        .updateTime(updateTime)
+                        .updateTime(DateUtils.formatRelativeTime(updateTime))
                         .likeTotal(NumberUtils.formatNumberString(likeTotal))
+                        .commentTotal(NumberUtils.formatNumberString(commentTotal))
+                        .collectTotal(NumberUtils.formatNumberString(collectTotal))
                         .build();
                 searchNoteRspVOS.add(searchNoteRspVO);
             }
