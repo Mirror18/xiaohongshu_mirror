@@ -11,7 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableScheduling
-@MapperScan("com.mirror.xiaohongshu.search.domain.mapper")
+@MapperScan("com.mirror.xiaohongshu.search.biz.domain.mapper")
 public class XiaohongshuSearchApplication {
     public static void main(String[] args) {
         org.springframework.boot.SpringApplication.run(XiaohongshuSearchApplication.class, args);
