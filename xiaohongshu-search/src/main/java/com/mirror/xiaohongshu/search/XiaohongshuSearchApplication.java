@@ -1,6 +1,7 @@
 package com.mirror.xiaohongshu.search;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @Auther: mirror
@@ -8,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @Description:
  */
 @SpringBootApplication
+@EnableScheduling
 public class XiaohongshuSearchApplication {
     public static void main(String[] args) {
         org.springframework.boot.SpringApplication.run(XiaohongshuSearchApplication.class, args);
