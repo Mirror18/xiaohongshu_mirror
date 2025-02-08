@@ -162,6 +162,13 @@
 
             <dependency>
                 <groupId>com.mirror</groupId>
+                <artifactId>xiaohongshu-search-api</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.mirror</groupId>
                 <artifactId>xiaohongshu-distributed-id-generator-api</artifactId>
                 <version>${revision}</version>
             </dependency>
