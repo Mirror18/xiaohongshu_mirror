@@ -31,6 +31,7 @@
         <module>xiaohongshu-user-relation</module>
         <module>xiaohongshu-count</module>
         <module>xiaohongshu-data-align</module>
+        <module>xiaohongshu-search</module>
     </modules>
 
     <properties>
