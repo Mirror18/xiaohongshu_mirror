@@ -73,3 +73,7 @@ rocketmq:
   consumer:
     group: xiaohashu_group
     pull-batch-size: 5 # 每次拉取的最大消息数
+
+
+elasticsearch:
+  address: 127.0.0.1:9200 # Elasticsearch 地址
