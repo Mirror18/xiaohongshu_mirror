@@ -23,7 +23,6 @@
         <dependency>
             <groupId>com.mirror</groupId>
             <artifactId>xiaohongshu-search-api</artifactId>
-            <version>${revision}</version>
         </dependency>
 
         <dependency>
