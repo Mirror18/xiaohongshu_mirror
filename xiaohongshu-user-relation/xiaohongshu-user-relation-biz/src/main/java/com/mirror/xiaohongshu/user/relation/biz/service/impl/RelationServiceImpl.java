@@ -444,7 +444,7 @@ public class RelationServiceImpl implements RelationService {
                 // RPC: 调用用户服务，并将 DTO 转换为 VO
                 findFollowingUserRspVOS = rpcUserServiceAndDTO2VO(userIds, findFollowingUserRspVOS);
 
-                // TODO: 异步将关注列表全量同步到 Redis
+
                 threadPoolTaskExecutor.submit(() -> syncFollowingList2Redis(userId));
             }
 
