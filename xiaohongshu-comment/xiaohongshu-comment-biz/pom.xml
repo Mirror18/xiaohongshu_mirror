@@ -110,6 +110,11 @@
             <artifactId>xiaohongshu-distributed-id-generator-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohongshu-kv-api</artifactId>
+        </dependency>
+
 
     </dependencies>
 

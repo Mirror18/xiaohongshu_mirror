@@ -1,6 +1,7 @@
 package com.mirror.xiaohongshu.comment.biz.domain.mapper;
 
 import com.mirror.xiaohongshu.comment.biz.domain.dataobject.CommentDO;
+import com.mirror.xiaohongshu.comment.biz.model.bo.CommentBO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,4 +25,13 @@ public interface CommentDOMapper {
      * @return
      */
     List<CommentDO> selectByCommentIds(@Param("commentIds") List<Long> commentIds);
+
+    /**
+     * 批量插入评论
+     * @param comments
+     * @return
+     */
+    int batchInsert(@Param("comments") List<CommentBO> comments);
+
+
 }

@@ -11,6 +11,7 @@ import com.mirror.xiaohongshu.comment.biz.domain.mapper.CommentDOMapper;
 import com.mirror.xiaohongshu.comment.biz.enums.CommentLevelEnum;
 import com.mirror.xiaohongshu.comment.biz.model.bo.CommentBO;
 import com.mirror.xiaohongshu.comment.biz.model.dto.PublishCommentMqDTO;
+import com.mirror.xiaohongshu.comment.biz.rpc.KeyValueRpcService;
 import jakarta.annotation.PreDestroy;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +25,7 @@ import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,11 @@ public class Comment2DBConsumer {
 
     // 每秒创建 1000 个令牌
     private RateLimiter rateLimiter = RateLimiter.create(1000);
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
+    @Resource
+    private KeyValueRpcService keyValueRpcService;
 
     @Bean
     public DefaultMQPushConsumer mqPushConsumer() throws MQClientException {
@@ -162,7 +169,28 @@ public class Comment2DBConsumer {
 
                 log.info("## 清洗后的 CommentBOS: {}", JsonUtils.toJsonString(commentBOS));
 
-                // TODO: 后续处理...
+                // 编程式事务，保证整体操作的原子性
+                transactionTemplate.execute(status -> {
+                    try {
+                        // 先批量存入评论元数据
+                        commentDOMapper.batchInsert(commentBOS);
+
+                        // 过滤出评论内容不为空的 BO
+                        List<CommentBO> commentContentNotEmptyBOS = commentBOS.stream()
+                                .filter(commentBO -> Boolean.FALSE.equals(commentBO.getIsContentEmpty()))
+                                .toList();
+                        if (CollUtil.isNotEmpty(commentContentNotEmptyBOS)) {
+                            // 批量存入评论内容
+                            keyValueRpcService.batchSaveCommentContent(commentContentNotEmptyBOS);
+                        }
+
+                        return true;
+                    } catch (Exception ex) {
+                        status.setRollbackOnly(); // 标记事务为回滚
+                        log.error("", ex);
+                        throw ex;
+                    }
+                });
 
                 // 手动 ACK，告诉 RocketMQ 这批次消息消费成功
                 return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
