@@ -10,14 +10,19 @@ import com.mirror.xiaohongshu.count.biz.enums.CommentLevelEnum;
 import com.mirror.xiaohongshu.count.biz.model.dto.CountPublishCommentMqDTO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +38,8 @@ import java.util.stream.Collectors;
 public class CountNoteChildCommentConsumer implements RocketMQListener<String> {
     @Resource
     private CommentDOMapper commentDOMapper;
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
 
     private BufferTrigger<String> bufferTrigger = BufferTrigger.<String>batchBlocking()
             .bufferSize(50000) // 缓存队列的最大容量
@@ -80,5 +87,26 @@ public class CountNoteChildCommentConsumer implements RocketMQListener<String> {
             // 更新一级评论的下级评论总数，进行累加操作
             commentDOMapper.updateChildCommentTotal(parentId, count);
         }
+
+
+        // 获取字典中所有评论 ID
+        Set<Long> commentIds = groupMap.keySet();
+
+        // 异步发送计数 MQ, 更新评论热度值
+        org.springframework.messaging.Message<String> message = MessageBuilder.withPayload(JsonUtils.toJsonString(commentIds))
+                .build();
+
+        // 异步发送 MQ 消息
+        rocketMQTemplate.asyncSend(MQConstants.TOPIC_COMMENT_HEAT_UPDATE, message, new SendCallback() {
+            @Override
+            public void onSuccess(SendResult sendResult) {
+                log.info("==> 【评论热度值更新】MQ 发送成功，SendResult: {}", sendResult);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                log.error("==> 【评论热度值更新】MQ 发送异常: ", throwable);
+            }
+        });
     }
 }
