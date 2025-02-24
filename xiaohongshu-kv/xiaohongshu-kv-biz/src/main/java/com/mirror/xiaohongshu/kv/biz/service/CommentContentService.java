@@ -2,6 +2,7 @@ package com.mirror.xiaohongshu.kv.biz.service;
 
 import com.mirror.framework.common.response.Response;
 import com.mirror.xiaohongshu.kv.dto.req.BatchAddCommentContentReqDTO;
+import com.mirror.xiaohongshu.kv.dto.req.BatchFindCommentContentReqDTO;
 
 /**
  * @Auther: mirror
@@ -17,4 +18,13 @@ public interface CommentContentService {
      * @return
      */
     Response<?> batchAddCommentContent(BatchAddCommentContentReqDTO batchAddCommentContentReqDTO);
+
+    /**
+     * 批量查询评论内容
+     * @param batchFindCommentContentReqDTO
+     * @return
+     */
+    Response<?> batchFindCommentContent(BatchFindCommentContentReqDTO batchFindCommentContentReqDTO);
+
+
 }
