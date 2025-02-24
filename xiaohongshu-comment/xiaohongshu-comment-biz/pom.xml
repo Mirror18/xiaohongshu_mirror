@@ -115,6 +115,11 @@
             <artifactId>xiaohongshu-kv-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.mirror</groupId>
+            <artifactId>xiaohongshu-user-api</artifactId>
+        </dependency>
+
         <!-- 快手 Buffer Trigger -->
         <dependency>
             <groupId>com.github.phantomthief</groupId>

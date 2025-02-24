@@ -1,6 +1,10 @@
 package com.mirror.xiaohongshu.comment.biz.controller;
 
 import com.mirror.framework.biz.operationlog.aspect.ApiOperationLog;
+import com.mirror.framework.common.response.PageResponse;
+import com.mirror.framework.common.response.Response;
+import com.mirror.xiaohongshu.comment.biz.model.vo.FindCommentItemRspVO;
+import com.mirror.xiaohongshu.comment.biz.model.vo.FindCommentPageListReqVO;
 import com.mirror.xiaohongshu.comment.biz.model.vo.PublishCommentReqVO;
 import com.mirror.xiaohongshu.comment.biz.server.CommentService;
 import jakarta.annotation.Resource;
@@ -10,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.mirror.framework.common.response.Response;
 
 /**
  * @Auther: mirror
@@ -29,6 +32,13 @@ public class CommentController {
     @ApiOperationLog(description = "发布评论")
     public Response<?> publishComment(@Validated @RequestBody PublishCommentReqVO publishCommentReqVO) {
         return commentService.publishComment(publishCommentReqVO);
+    }
+
+
+    @PostMapping("/list")
+    @ApiOperationLog(description = "评论分页查询")
+    public PageResponse<FindCommentItemRspVO> findCommentPageList(@Validated @RequestBody FindCommentPageListReqVO findCommentPageListReqVO) {
+        return commentService.findCommentPageList(findCommentPageListReqVO);
     }
 
 }
